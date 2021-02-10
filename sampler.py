@@ -1,6 +1,6 @@
 import pygame as pg
 import pygame._sdl2 as sdl2
-from pygame import draw, event
+
 
 class Buttonclass:
 
