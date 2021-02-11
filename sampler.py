@@ -12,6 +12,8 @@ class Buttonclass:
         self.screen = screen
         self.buttonsurf = pg.Surface((sizex, sizey))
         self.buttonrect = self.buttonsurf.get_rect(x=posx,y=posy)
+        self.volumesurf = pg.Surface((int(sizex/4), sizey))
+        self.volumerect = self.volumesurf.get_rect(x=(posx+sizex+5), y=posy)
         
     #Draw the button and check if the mouse is over
     def buttonDraw(self):
@@ -20,6 +22,12 @@ class Buttonclass:
         else:
             self.buttonsurf.fill((120,0,0)) 
         self.screen.blit(self.buttonsurf,self.buttonrect)
+        if self.volumerect.collidepoint(pg.mouse.get_pos()):
+            pass
+        else:
+            self.volumesurf.fill((120,0,0))
+        self.screen.blit(self.volumesurf, self.volumerect)
+        
 
     def buttonSound(self, file):
         pg.mixer.music.load(file)
@@ -49,11 +57,11 @@ size = [500, 500]
 screen = pg.display.set_mode(size)
 
 button1 = Buttonclass(50,50, 50, 50, screen)
-button2 = Buttonclass(50,50, 120, 50, screen)
-button3 = Buttonclass(50,50, 190, 50, screen)
+button2 = Buttonclass(50,50, 140, 50, screen)
+button3 = Buttonclass(50,50, 230, 50, screen)
 button4 = Buttonclass(50,50, 50, 120, screen)
-button5 = Buttonclass(50,50, 120, 120, screen)
-button6 = Buttonclass(50,50, 190, 120, screen)
+button5 = Buttonclass(50,50, 140, 120, screen)
+button6 = Buttonclass(50,50, 230, 120, screen)
 button7 = Buttonclass(190,150, 50, 185, screen)
 
 #variable for loop
