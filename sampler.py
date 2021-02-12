@@ -107,11 +107,24 @@ while done == 1:
                     screen.blit(button1.volumesurf, button1.volumerect)
                 elif pg.mouse.get_pos()[1] > (button1.posy+(button1.sizey*button1.vol)) and button1.vol <=1:
                     volinc = pg.mouse.get_pos()[1] - button1.posy
-                    button1.vol = (volinc*100)*button1.sizey
+                    button1.vol = volinc/button1.sizey
                     print("volinc is {}".format(volinc))
                     print("vol is {}".format(button1.vol))
                     button1.volumesurf.fill((120,0,0))
                     screen.blit(button1.volumesurf, button1.volumerect)
+            if button7.volumecontrect.collidepoint(mousepos):
+                if pg.mouse.get_pos()[1] < (button7.posy+(button7.sizey*button7.vol)) and button7.vol >=0.10:
+                    button7.vol = ((pg.mouse.get_pos()[1]-button7.posy)*1)/button7.sizey
+                    print(button7.vol)
+                    button7.volumesurf.fill((0,0,0))
+                    screen.blit(button7.volumesurf, button7.volumerect)
+                elif pg.mouse.get_pos()[1] > (button7.posy+(button7.sizey*button7.vol)) and button7.vol <=1:
+                    volinc = pg.mouse.get_pos()[1] - button7.posy
+                    button7.vol = volinc/button7.sizey
+                    print("volinc is {}".format(volinc))
+                    print("vol is {}".format(button7.vol))
+                    button7.volumesurf.fill((120,0,0))
+                    screen.blit(button7.volumesurf, button7.volumerect)
 
 
         if event.type == pg.KEYDOWN:
