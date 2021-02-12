@@ -4,29 +4,37 @@ import pygame._sdl2 as sdl2
 
 class Buttonclass:
 
-    def __init__(self, sizex, sizey, posx, posy,screen):
+    def __init__(self, sizex, sizey, posx, posy, vol, screen):
         self.sizex = sizex
         self.sizey = sizey
         self.posx = posx
         self.posy = posy
+        self.vol = vol
         self.screen = screen
-        self.buttonsurf = pg.Surface((sizex, sizey))
-        self.buttonrect = self.buttonsurf.get_rect(x=posx,y=posy)
-        self.volumesurf = pg.Surface((int(sizex/4), sizey))
-        self.volumerect = self.volumesurf.get_rect(x=(posx+sizex+5), y=posy)
+        self.buttonsurf = pg.Surface((self.sizex, self.sizey))
+        self.buttonrect = self.buttonsurf.get_rect(x=self.posx,y=self.posy)
+
         
     #Draw the button and check if the mouse is over
     def buttonDraw(self):
+        self.volumesurf = pg.Surface((int(self.sizex/4), int(self.sizey*self.vol)))
+        self.volumerect = self.volumesurf.get_rect(x=(self.posx+self.sizex+5), y=self.posy)
+        self.volumecontsurf = pg.Surface((int(self.sizex/4), int(self.sizey*1.01)))
+        self.volumecontrect = self.volumecontsurf.get_rect(x=(self.posx+self.sizex+5), y=self.posy)
+
+        #Update button if mouse is on
         if self.buttonrect.collidepoint(pg.mouse.get_pos()):
             self.buttonsurf.fill((255,255,255))
         else:
             self.buttonsurf.fill((120,0,0)) 
         self.screen.blit(self.buttonsurf,self.buttonrect)
-        if self.volumerect.collidepoint(pg.mouse.get_pos()):
-            pass
-        else:
-            self.volumesurf.fill((120,0,0))
+        #Update container for volume bar
+        self.volumecontsurf.fill((0,0,0))
+        self.screen.blit(self.volumecontsurf, self.volumecontrect)
+        #Update volume bar
+        self.volumesurf.fill((120,0,0))
         self.screen.blit(self.volumesurf, self.volumerect)
+
         
 
     def buttonSound(self, file):
@@ -45,35 +53,36 @@ def initSoundDevice():
 # initializing the general settings
 pg.init() 
 FPS = 30
+hitcounter = 0
+vol = 1
 fpsClock = pg.time.Clock()
 devices = initSoundDevice()
 pg.mixer.pre_init(devicename=devices[0])
-print(len(devices))
+#print(len(devices))
 pg.mixer.init()
-hitcounter = 0
+
 
 #set the width and height of the screen
 size = [500, 500]
 screen = pg.display.set_mode(size)
 
-button1 = Buttonclass(50,50, 50, 50, screen)
-button2 = Buttonclass(50,50, 140, 50, screen)
-button3 = Buttonclass(50,50, 230, 50, screen)
-button4 = Buttonclass(50,50, 50, 120, screen)
-button5 = Buttonclass(50,50, 140, 120, screen)
-button6 = Buttonclass(50,50, 230, 120, screen)
-button7 = Buttonclass(190,150, 50, 185, screen)
+button1 = Buttonclass(50,50, 50, 50, vol, screen)
+button2 = Buttonclass(50,50, 140, 50, vol, screen)
+button3 = Buttonclass(50,50, 230, 50, vol, screen)
+button4 = Buttonclass(50,50, 50, 120, vol, screen)
+button5 = Buttonclass(50,50, 140, 120, vol, screen)
+button6 = Buttonclass(50,50, 230, 120, vol, screen)
+button7 = Buttonclass(190,150, 50, 185, vol, screen)
 
-#variable for loop
-done = 0
+#Variable for loops
+done = 1
 
-
-while done == 0:
+while done == 1:
 
     for event in pg.event.get():
         if event.type == pg.QUIT:
             pg.mixer.quit()
-            done = 1
+            done = 0
         if event.type == pg.MOUSEBUTTONDOWN:
             if button1.buttonrect.collidepoint(mousepos):
                 button1.buttonSound("ULTRAPOBRE.MP3")  
@@ -89,9 +98,24 @@ while done == 0:
                 button6.buttonSound("XMEN.MP3")
             if button7.buttonrect.collidepoint(mousepos):
                 button7.buttonSound("OOF.WAV")
+            #changing volume bar size clicking on it
+            if button1.volumecontrect.collidepoint(mousepos):
+                if pg.mouse.get_pos()[1] < (button1.posy+(button1.sizey*button1.vol)) and button1.vol >=0.10:
+                    button1.vol = ((pg.mouse.get_pos()[1]-button1.posy)*1)/button1.sizey
+                    print(button1.vol)
+                    button1.volumesurf.fill((0,0,0))
+                    screen.blit(button1.volumesurf, button1.volumerect)
+                elif pg.mouse.get_pos()[1] > (button1.posy+(button1.sizey*button1.vol)) and button1.vol <=1:
+                    volinc = pg.mouse.get_pos()[1] - button1.posy
+                    button1.vol = (volinc*100)*button1.sizey
+                    print("volinc is {}".format(volinc))
+                    print("vol is {}".format(button1.vol))
+                    button1.volumesurf.fill((120,0,0))
+                    screen.blit(button1.volumesurf, button1.volumerect)
+
 
         if event.type == pg.KEYDOWN:
-            if event.key == pg.K_1:
+            if event.key == pg.K_1:     
                 pg.mixer.quit()
                 pg.mixer.pre_init(devicename=devices[0])
                 pg.mixer.init()
