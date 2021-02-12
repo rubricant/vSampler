@@ -1,5 +1,6 @@
 import pygame as pg
 import pygame._sdl2 as sdl2
+from decimal import Decimal
 
 
 class Buttonclass:
@@ -38,6 +39,8 @@ class Buttonclass:
         
 
     def buttonSound(self, file):
+
+        pg.mixer.music.set_volume(self.vol)
         pg.mixer.music.load(file)
         pg.mixer.music.play()
 
