@@ -43,6 +43,20 @@ class Buttonclass:
         pg.mixer.music.set_volume(self.vol)
         pg.mixer.music.load(file)
         pg.mixer.music.play()
+        
+    def buttonVolume(self):
+        if pg.mouse.get_pos()[1] < (self.posy+(self.sizey*self.vol)) and self.vol >=0.10:
+            self.vol = ((pg.mouse.get_pos()[1]-self.posy)*1)/self.sizey
+            print(self.vol)
+            self.volumesurf.fill((0,0,0))
+            screen.blit(self.volumesurf, self.volumerect)
+        elif pg.mouse.get_pos()[1] > (self.posy+(self.sizey*self.vol)) and self.vol <=1:
+            volinc = pg.mouse.get_pos()[1] - self.posy
+            self.vol = volinc/self.sizey
+            print("volinc is {}".format(volinc))
+            print("vol is {}".format(self.vol))
+            self.volumesurf.fill((120,0,0))
+            screen.blit(self.volumesurf, self.volumerect)
 
 #Function for enum and name Sound Device
 def initSoundDevice():
@@ -87,6 +101,7 @@ while done == 1:
             pg.mixer.quit()
             done = 0
         if event.type == pg.MOUSEBUTTONDOWN:
+            # Play sound clicking on buttons
             if button1.buttonrect.collidepoint(mousepos):
                 button1.buttonSound("ULTRAPOBRE.MP3")  
             if button2.buttonrect.collidepoint(mousepos):
@@ -101,34 +116,19 @@ while done == 1:
                 button6.buttonSound("XMEN.MP3")
             if button7.buttonrect.collidepoint(mousepos):
                 button7.buttonSound("OOF.WAV")
-            #changing volume bar size clicking on it
+            #changing volume clicking on it
             if button1.volumecontrect.collidepoint(mousepos):
-                if pg.mouse.get_pos()[1] < (button1.posy+(button1.sizey*button1.vol)) and button1.vol >=0.10:
-                    button1.vol = ((pg.mouse.get_pos()[1]-button1.posy)*1)/button1.sizey
-                    print(button1.vol)
-                    button1.volumesurf.fill((0,0,0))
-                    screen.blit(button1.volumesurf, button1.volumerect)
-                elif pg.mouse.get_pos()[1] > (button1.posy+(button1.sizey*button1.vol)) and button1.vol <=1:
-                    volinc = pg.mouse.get_pos()[1] - button1.posy
-                    button1.vol = volinc/button1.sizey
-                    print("volinc is {}".format(volinc))
-                    print("vol is {}".format(button1.vol))
-                    button1.volumesurf.fill((120,0,0))
-                    screen.blit(button1.volumesurf, button1.volumerect)
+                button1.buttonVolume()
+            if button2.volumecontrect.collidepoint(mousepos):
+                button2.buttonVolume()
+            if button3.volumecontrect.collidepoint(mousepos):
+                button4.buttonVolume()
+            if button5.volumecontrect.collidepoint(mousepos):
+                button5.buttonVolume()
+            if button6.volumecontrect.collidepoint(mousepos):
+                button6.buttonVolume()
             if button7.volumecontrect.collidepoint(mousepos):
-                if pg.mouse.get_pos()[1] < (button7.posy+(button7.sizey*button7.vol)) and button7.vol >=0.10:
-                    button7.vol = ((pg.mouse.get_pos()[1]-button7.posy)*1)/button7.sizey
-                    print(button7.vol)
-                    button7.volumesurf.fill((0,0,0))
-                    screen.blit(button7.volumesurf, button7.volumerect)
-                elif pg.mouse.get_pos()[1] > (button7.posy+(button7.sizey*button7.vol)) and button7.vol <=1:
-                    volinc = pg.mouse.get_pos()[1] - button7.posy
-                    button7.vol = volinc/button7.sizey
-                    print("volinc is {}".format(volinc))
-                    print("vol is {}".format(button7.vol))
-                    button7.volumesurf.fill((120,0,0))
-                    screen.blit(button7.volumesurf, button7.volumerect)
-
+                button7.buttonVolume()
 
         if event.type == pg.KEYDOWN:
             if event.key == pg.K_1:     
