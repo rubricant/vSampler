@@ -122,6 +122,8 @@ while done == 1:
             if button2.volumecontrect.collidepoint(mousepos):
                 button2.buttonVolume()
             if button3.volumecontrect.collidepoint(mousepos):
+                button3.buttonVolume()
+            if button4.volumecontrect.collidepoint(mousepos):
                 button4.buttonVolume()
             if button5.volumecontrect.collidepoint(mousepos):
                 button5.buttonVolume()
