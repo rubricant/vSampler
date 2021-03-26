@@ -1,6 +1,8 @@
 import pygame as pg
 import pygame._sdl2 as sdl2
+import midicontroller as mc
 from decimal import Decimal
+
 
 
 class Buttonclass:
@@ -67,6 +69,9 @@ def initSoundDevice():
     return names
 
 
+
+
+
 # initializing the general settings
 pg.init() 
 FPS = 30
@@ -75,6 +80,9 @@ vol = 1
 fpsClock = pg.time.Clock()
 devices = initSoundDevice()
 pg.mixer.pre_init(devicename=devices[0])
+font = pg.font.SysFont("console", 12)
+text = font.render("1: {}".format(devices[0]), 0, (255, 255, 255))
+device_input = mc.midi_device_select()
 #print(len(devices))
 pg.mixer.init()
 
@@ -82,6 +90,7 @@ pg.mixer.init()
 #set the width and height of the screen
 size = [500, 500]
 screen = pg.display.set_mode(size)
+pg.display.set_caption("vSampler")
 
 button1 = Buttonclass(50,50, 50, 50, vol, screen)
 button2 = Buttonclass(50,50, 140, 50, vol, screen)
@@ -105,7 +114,7 @@ while done == 1:
             if button1.buttonrect.collidepoint(mousepos):
                 button1.buttonSound("ULTRAPOBRE.MP3")  
             if button2.buttonrect.collidepoint(mousepos):
-                button2.buttonSound("AIRHORN.MP3")
+                button2.buttonSound("AIRHORN.WAV")
             if button3.buttonrect.collidepoint(mousepos):
                 button3.buttonSound("BATERIA.MP3")              
             if button4.buttonrect.collidepoint(mousepos):
@@ -162,6 +171,22 @@ while done == 1:
                 print(devices[hitcounter])
                 pg.mixer.init()
 
+
+
+    if device_input != None:
+        if device_input.poll():
+            midi_events = device_input.read(100)
+
+            for midi_event in midi_events:
+                print(midi_event)
+                if midi_event[0][1] == 48 and midi_event[0][2] > 0:
+                    button1.buttonSound("ULTRAPOBRE.MP3")  
+                if midi_event[0][1] == 49 and midi_event[0][2] > 0:
+                    button2.buttonSound("AIRHORN.WAV")
+                if midi_event[0][1] == 50 and midi_event[0][2] > 0:
+                    button3.buttonSound("BATERIA.MP3")  
+                                        
+
     button1.buttonDraw()
     button2.buttonDraw()
     button3.buttonDraw()
@@ -169,6 +194,8 @@ while done == 1:
     button5.buttonDraw()
     button6.buttonDraw()
     button7.buttonDraw()
+    screen.blit(text, (50,400))
     mousepos = pg.mouse.get_pos()
     pg.display.update()
     fpsClock.tick(FPS)
+del device_input
