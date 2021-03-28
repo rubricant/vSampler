@@ -184,7 +184,15 @@ while done == 1:
                 if midi_event[0][1] == 49 and midi_event[0][2] > 0:
                     button2.buttonSound("AIRHORN.WAV")
                 if midi_event[0][1] == 50 and midi_event[0][2] > 0:
+                    button3.buttonSound("BATERIA.MP3")
+                if midi_event[0][1] == 51 and midi_event[0][2] > 0:
                     button3.buttonSound("BATERIA.MP3")  
+                if midi_event[0][1] == 52 and midi_event[0][2] > 0:
+                    button3.buttonSound("BATERIA.MP3")                        
+                if midi_event[0][1] == 53 and midi_event[0][2] > 0:
+                    button3.buttonSound("BATERIA.MP3")  
+                if midi_event[0][1] == 54 and midi_event[0][2] > 0:
+                    button3.buttonSound("BATERIA.MP3")                                          
                                         
 
     button1.buttonDraw()
