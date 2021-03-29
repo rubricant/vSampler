@@ -14,6 +14,7 @@ class Buttonclass:
         self.posy = posy
         self.vol = vol
         self.screen = screen
+        self.midibuttonstatus = False
         self.buttonsurf = pg.Surface((self.sizex, self.sizey))
         self.buttonrect = self.buttonsurf.get_rect(x=self.posx,y=self.posy)
 
@@ -27,9 +28,11 @@ class Buttonclass:
 
         #Update button if mouse is on
         if self.buttonrect.collidepoint(pg.mouse.get_pos()):
-            self.buttonsurf.fill((255,255,255))
-        else:
-            self.buttonsurf.fill((120,0,0)) 
+            self.midibuttonstatus= True
+        if self.midibuttonstatus == True:
+            self.buttonsurf.fill((255,255,0))
+        if self.midibuttonstatus == False:
+            self.buttonsurf.fill((120,0,0))
         self.screen.blit(self.buttonsurf,self.buttonrect)
         #Update container for volume bar
         self.volumecontsurf.fill((0,0,0))
@@ -37,7 +40,6 @@ class Buttonclass:
         #Update volume bar
         self.volumesurf.fill((120,0,0))
         self.screen.blit(self.volumesurf, self.volumerect)
-
         
 
     def buttonSound(self, file):
@@ -116,15 +118,15 @@ while done == 1:
             if button2.buttonrect.collidepoint(mousepos):
                 button2.buttonSound("AIRHORN.WAV")
             if button3.buttonrect.collidepoint(mousepos):
-                button3.buttonSound("BATERIA.MP3")              
+                button3.buttonSound("AIRHORN.WAV")              
             if button4.buttonrect.collidepoint(mousepos):
-                button4.buttonSound("BESTIAS.MP3")
+                button4.buttonSound("AIRHORN.WAV")
             if button5.buttonrect.collidepoint(mousepos):
-                button5.buttonSound("TRANSFORMERS.MP3")
+                button5.buttonSound("AIRHORN.WAV")
             if button6.buttonrect.collidepoint(mousepos):
-                button6.buttonSound("XMEN.MP3")
+                button6.buttonSound("AIRHORN.WAV")
             if button7.buttonrect.collidepoint(mousepos):
-                button7.buttonSound("OOF.WAV")
+                button7.buttonSound("AIRHORN.WAV")
             #changing volume clicking on it
             if button1.volumecontrect.collidepoint(mousepos):
                 button1.buttonVolume()
@@ -169,9 +171,10 @@ while done == 1:
                 pg.mixer.quit()
                 pg.mixer.pre_init(devicename=devices[hitcounter])
                 print(devices[hitcounter])
+                text = font.render("1: {}".format(devices[hitcounter-1]), 0, (0,0,0))
+                screen.blit(text, (50,400))
+                text = font.render("1: {}".format(devices[hitcounter]), 0, (255, 255, 255))
                 pg.mixer.init()
-
-
 
     if device_input != None:
         if device_input.poll():
@@ -179,21 +182,49 @@ while done == 1:
 
             for midi_event in midi_events:
                 print(midi_event)
-                if midi_event[0][1] == 48 and midi_event[0][2] > 0:
-                    button1.buttonSound("ULTRAPOBRE.MP3")  
-                if midi_event[0][1] == 49 and midi_event[0][2] > 0:
+                if midi_event[0][1] == 48 and midi_event[0][0] == 144:
+                    button1.buttonSound("ULTRAPOBRE.MP3")
+                    button1.midibuttonstatus = True
+                if midi_event[0][1] == 48 and midi_event[0][0] == 128:
+                    button1.midibuttonstatus = False
+
+                if midi_event[0][1] == 49 and midi_event[0][0] == 144:
                     button2.buttonSound("AIRHORN.WAV")
-                if midi_event[0][1] == 50 and midi_event[0][2] > 0:
-                    button3.buttonSound("BATERIA.MP3")
-                if midi_event[0][1] == 51 and midi_event[0][2] > 0:
-                    button3.buttonSound("BATERIA.MP3")  
-                if midi_event[0][1] == 52 and midi_event[0][2] > 0:
-                    button3.buttonSound("BATERIA.MP3")                        
-                if midi_event[0][1] == 53 and midi_event[0][2] > 0:
-                    button3.buttonSound("BATERIA.MP3")  
-                if midi_event[0][1] == 54 and midi_event[0][2] > 0:
-                    button3.buttonSound("BATERIA.MP3")                                          
-                                        
+                    button2.midibuttonstatus = True
+                if midi_event[0][1] == 49 and midi_event[0][0] == 128:
+                    button2.midibuttonstatus = False
+
+                if midi_event[0][1] == 50 and midi_event[0][0] == 144:
+                    button3.buttonSound("AIRHORN.WAV")
+                    button3.midibuttonstatus = True
+                if midi_event[0][1] == 50 and midi_event[0][0] == 128:
+                    button3.midibuttonstatus = False
+
+                if midi_event[0][1] == 51 and midi_event[0][0] == 144:
+                    button4.buttonSound("AIRHORN.WAV")  
+                    button4.midibuttonstatus = True
+                if midi_event[0][1] == 51 and midi_event[0][0] == 128:
+                    button4.midibuttonstatus = False
+
+                if midi_event[0][1] == 52 and midi_event[0][0] == 144:
+                    button5.buttonSound("AIRHORN.WAV")
+                    button5.midibuttonstatus = True
+                if midi_event[0][1] == 52 and midi_event[0][0] == 128:
+                    button5.midibuttonstatus = False
+
+                if midi_event[0][1] == 53 and midi_event[0][0] == 144:
+                    button6.buttonSound("AIRHORN.WAV")
+                    button6.midibuttonstatus = True
+                if midi_event[0][1] == 53 and midi_event[0][0] == 128:
+                    button6.midibuttonstatus = False
+
+                if midi_event[0][1] == 54 and midi_event[0][0] == 144:
+                    button7.buttonSound("AIRHORN.WAV") 
+                    button7.midibuttonstatus = True
+                if midi_event[0][1] == 54 and midi_event[0][0] == 128:
+                    button7.midibuttonstatus = False                                                                                 
+    
+                              
 
     button1.buttonDraw()
     button2.buttonDraw()
@@ -202,6 +233,13 @@ while done == 1:
     button5.buttonDraw()
     button6.buttonDraw()
     button7.buttonDraw()
+    button1.midibuttonstatus = False
+    button2.midibuttonstatus = False 
+    button3.midibuttonstatus = False
+    button4.midibuttonstatus = False  
+    button5.midibuttonstatus = False
+    button6.midibuttonstatus = False
+    button7.midibuttonstatus = False          
     screen.blit(text, (50,400))
     mousepos = pg.mouse.get_pos()
     pg.display.update()
