@@ -1,5 +1,6 @@
 import pygame as pg
 import pygame._sdl2 as sdl2
+import pygame._sdl2.audio as sdl2_audio
 import midicontroller as mc
 from decimal import Decimal
 
@@ -62,15 +63,13 @@ class Buttonclass:
             self.volumesurf.fill((120,0,0))
             screen.blit(self.volumesurf, self.volumerect)
 
-#Function for enum and name Sound Device
+#List sound playback devices
 def initSoundDevice():
-
-    is_capture = 0  # zero to request playback devices, non-zero to request recording devices
-    num = sdl2.get_num_audio_devices(is_capture)
-    names = [str(sdl2.get_audio_device_name(i, is_capture), encoding="utf-8") for i in range(num)]
-    return names
-
-
+    pg.mixer.init()
+    devices = sdl2_audio.get_audio_device_names(False) #false to request playback device, true for recording devices
+    print(devices)
+    pg.mixer.quit
+    return devices
 
 
 
